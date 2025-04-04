@@ -2,9 +2,6 @@ import streamlit as st
 
 st.set_page_config(layout="wide")
 
-def page2():
-    st.title("Second page")
-
 pg = st.navigation([
     st.Page("pages/sobre.py", title="Detalhes", icon="👨‍💼"),
     st.Page("pages/projetos.py", title="Projetos", icon="📊")
