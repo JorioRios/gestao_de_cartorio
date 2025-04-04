@@ -4,3 +4,5 @@ plotly
 plotly.express
 datetime
 streamlit_extras
+streamlit-echarts
+streamlit-aggrid
