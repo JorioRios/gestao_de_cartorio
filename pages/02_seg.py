@@ -3,25 +3,32 @@ import pandas as pd
 from datetime import datetime
 import plotly.express as px
 
+if "logged_in" not in st.session_state:
+    st.session_state["logged_in"] = False
+
 if st.button("Clique Aqui Para Voltar", type='primary'):
-    st.switch_page("main.py")
+    if st.session_state["logged_in"] == False:
+        st.switch_page("main.py")
+    else:
+        st.switch_page("pages/10_apresent.py")
 
 with st.container(border=True):
-    st.markdown("""
-    ### 🧾 Vantagens do Relatório de Indicador do Registro
+    if st.session_state["logged_in"] == False:
+        st.markdown("""
+        ### 🧾 Vantagens do Relatório de Indicador do Registro
 
-    📈 **Histórico completo da performance**, mostrando mês a mês a quantidade de protocolos feitos, os atrasos e o tempo médio até o registro ou impugnação, permitindo visualizar claramente a evolução e identificar tendências.
+        📈 **Histórico completo da performance**, mostrando mês a mês a quantidade de protocolos feitos, os atrasos e o tempo médio até o registro ou impugnação, permitindo visualizar claramente a evolução e identificar tendências.
 
-    📌 **Identificação precisa das naturezas com maior atraso**, possibilitando ações corretivas direcionadas, como revisão de fluxos, reforço de equipe ou priorização de certos tipos de serviço.
+        📌 **Identificação precisa das naturezas com maior atraso**, possibilitando ações corretivas direcionadas, como revisão de fluxos, reforço de equipe ou priorização de certos tipos de serviço.
 
-    🟢 **Incentivo à melhoria contínua**, com dados que demonstram se o percentual de atraso está diminuindo e se os dias para registro estão dentro de uma média aceitável, fortalecendo a cultura de excelência.
+        🟢 **Incentivo à melhoria contínua**, com dados que demonstram se o percentual de atraso está diminuindo e se os dias para registro estão dentro de uma média aceitável, fortalecendo a cultura de excelência.
 
-    📊 **Comparativo visual entre prazos cumpridos e vencidos**, através de gráficos intuitivos que facilitam a tomada de decisão estratégica e a comunicação dos resultados à equipe.
+        📊 **Comparativo visual entre prazos cumpridos e vencidos**, através de gráficos intuitivos que facilitam a tomada de decisão estratégica e a comunicação dos resultados à equipe.
 
-    🔍 **Acesso detalhado aos protocolos com atraso**, com possibilidade de identificar exatamente quais foram os registros fora do prazo — preservando a privacidade no relatório geral, mas disponível para análise interna quando necessário.
+        🔍 **Acesso detalhado aos protocolos com atraso**, com possibilidade de identificar exatamente quais foram os registros fora do prazo — preservando a privacidade no relatório geral, mas disponível para análise interna quando necessário.
 
-    📂 **Base sólida para reuniões de desempenho**, auditorias e planejamento, com números confiáveis que ajudam na definição de metas realistas e no reconhecimento de boas práticas.
-    """)
+        📂 **Base sólida para reuniões de desempenho**, auditorias e planejamento, com números confiáveis que ajudam na definição de metas realistas e no reconhecimento de boas práticas.
+        """)
 
 @st.cache_data
 def carregar_dados():
@@ -29,18 +36,13 @@ def carregar_dados():
 df = carregar_dados()
 
 protocolos = df.shape[0]
-with st.container(border=True):
-    st.markdown(f"### Indicador Registro ({protocolos} Protocolos Feitos)")
 
-a1, a2 = st.columns(2, border=True)
+a1, a2 = st.columns([5.1,1], border=True) 
 
 with a1:
-    filtro0 = st.selectbox("Selecionar Status:", sorted(df['status'].dropna().unique()), index=None, placeholder="Todos Selecionados")
+    st.markdown(f"### Indicador Registro ({protocolos} Protocolos Feitos)")
 
-    if filtro0 is None:
-        df_filtrado = df
-    else:
-        df_filtrado = df[df['status'] == filtro0]
+df_filtrado = df
 
 with a2:
     filtro1 = st.selectbox("Selecionar Ano/Mês:", sorted(df['mes_ano'].unique(),reverse=True), index=None, placeholder="2024-12")
@@ -93,7 +95,7 @@ styled_df = df_filtered.style \
         'Perc. Atraso (%)': lambda x: f"{add_icon(x, 'Percentual_Atrasados')} {x:.2f}"
     })
 
-col11, col12, col13, col14, col15 = st.columns([2,1,1,1,1], gap='medium', vertical_alignment='center', border=True)
+col11, col12, col13, col14, col15 = st.columns([2,1,1,1,1], vertical_alignment='center', border=True)
 with col11:
     st.title(f'{filtro1} Métricas')
 with col12:

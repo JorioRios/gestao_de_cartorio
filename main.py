@@ -80,9 +80,17 @@ with a2:
 
                 Nesta página, você verá uma amostra dos <strong>relatórios desenvolvidos</strong>.<br>
                 Se quiser implementar essa metodologia no seu cartório, <strong>entre em contato comigo</strong> clicando no botão abaixo:
-
                 <br><br>
                 <a href="https://wa.me/5562999336111" target="_blank" style="background-color:#25D366; color:white; padding:10px 20px; border-radius:5px; text-decoration:none; font-weight:bold;">
                 💬 Falar no WhatsApp
                 </a>
                 """, unsafe_allow_html=True)
+        
+    apresentacao = st.text_input("Senha Para Apresentação", type="password")
+
+    st.session_state["logged_in"] = False
+
+    if apresentacao == '190687':
+        st.session_state["logged_in"] = True
+        if st.button("Ver Apresentação", type='primary'):
+            st.switch_page("pages/10_apresent.py")        

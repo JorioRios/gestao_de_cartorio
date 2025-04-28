@@ -3,23 +3,30 @@ import pandas as pd
 from streamlit_echarts import st_echarts
 from st_aggrid import AgGrid, GridOptionsBuilder
 
+if "logged_in" not in st.session_state:
+    st.session_state["logged_in"] = False
+
 if st.button("Clique Aqui Para Voltar", type='primary'):
-    st.switch_page("main.py")
+    if st.session_state["logged_in"] == False:
+        st.switch_page("main.py")
+    else:
+        st.switch_page("pages/10_apresent.py")
 
 with st.container(border=True):
-    st.markdown("""
-    ### ✅ Principais Vantagens do Relatório de Tempo Real dos Protocolos
+    if st.session_state["logged_in"] == False:
+        st.markdown("""
+        ### ✅ Principais Vantagens do Relatório de Tempo Real dos Protocolos
 
-    📊 **Acompanhamento em tempo real** da quantidade de protocolos por etapa, colaborador e natureza, proporcionando uma visão completa do andamento dos trabalhos.
+        📊 **Acompanhamento em tempo real** da quantidade de protocolos por etapa, colaborador e natureza, proporcionando uma visão completa do andamento dos trabalhos.
 
-    ⚠️ **Redução de falhas operacionais**, evitando esquecimentos de baixas no sistema e garantindo maior confiabilidade nas informações.
+        ⚠️ **Redução de falhas operacionais**, evitando esquecimentos de baixas no sistema e garantindo maior confiabilidade nas informações.
 
-    📂 **Controle eficaz dos documentos**, permitindo identificar rapidamente quais protocolos devem ser executados com prioridade, otimizando o fluxo de trabalho e o cumprimento de prazos.
+        📂 **Controle eficaz dos documentos**, permitindo identificar rapidamente quais protocolos devem ser executados com prioridade, otimizando o fluxo de trabalho e o cumprimento de prazos.
 
-    ⏱️ **Tomada de decisão imediata**, possibilitando, ao bater o olho, identificar gargalos e avaliar a necessidade de alocação de recursos extras, como hora extra ou redistribuição de tarefas.
+        ⏱️ **Tomada de decisão imediata**, possibilitando, ao bater o olho, identificar gargalos e avaliar a necessidade de alocação de recursos extras, como hora extra ou redistribuição de tarefas.
 
-    🔄 **Agilidade na gestão**, com relatórios dinâmicos que se atualizam automaticamente, facilitando reuniões rápidas e objetivas com base em dados concretos.
-    """)
+        🔄 **Agilidade na gestão**, com relatórios dinâmicos que se atualizam automaticamente, facilitando reuniões rápidas e objetivas com base em dados concretos.
+        """)
 
 df = pd.read_excel('dados/previsao.xlsx', sheet_name='previsao')
 
@@ -121,7 +128,7 @@ key_suffix = f"_{st.session_state.force_rerender}"
 # Renderiza o gráfico com eventos
 with st.container(border=True):
     selected_event = st_echarts(
-        options=options, events=events, height=600, key=f"render_grouped_bar_events{key_suffix}"
+        options=options, events=events, height=500, key=f"render_grouped_bar_events{key_suffix}"
     )
 
 # Captura o evento selecionado
