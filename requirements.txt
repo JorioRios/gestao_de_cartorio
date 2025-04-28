@@ -7,3 +7,4 @@ streamlit_extras
 streamlit-echarts
 streamlit-aggrid
 openpyxl
+seaborn
